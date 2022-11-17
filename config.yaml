@@ -256,35 +256,40 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xxx
+  name: cartservice
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: xxx
+      app: cartservice
   template:
     metadata:
       labels:
-        app: xxx
+        app: cartservice
     spec:
       containers:
-      - name: xxx
-        image: xxx(:vx.x.x)
+      - name: service
+        image: gcr.io/google-samples/microservices-demo/cartservice:v0.2.3
         ports:
-        - containerPort: xxx
+        - containerPort: 7070
+        env:
+        - name: PORT
+          value: "7070"
+        - name: REDIS_ADDR
+          value: "xxx"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xxx
+  name: cartservice
 spec:
   type: ClusterIP
   selector:
-    app: xxx
+    app: cartservice
   ports:
   - protocol: TCP
-    port: xxx
-    targetPort: xxx
+    port: 7070
+    targetPort: 7070
 ---
 apiVersion: apps/v1
 kind: Deployment
