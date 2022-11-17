@@ -381,32 +381,50 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: xxx
+  name: frontend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: xxx
+      app: frontend
   template:
     metadata:
       labels:
-        app: xxx
+        app: frontend
     spec:
       containers:
-      - name: xxx
-        image: xxx(:vx.x.x)
+      - name: service
+        image: gcr.io/google-samples/microservices-demo/frontend:v0.2.3
         ports:
-        - containerPort: xxx
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: PRODUCT_CATALOG_SERVICE_ADDR
+          value: "productcatalogservice:3550"
+        - name: CURRENCY_SERVICE_ADDR
+          value: "currencyservice:7000"
+        - name: CART_SERVICE_ADDR
+          value: "cartservice:7070"
+        - name: RECOMMENDATION_SERVICE_ADDR
+          value: "recommendationservice:8080"
+        - name: SHIPPING_SERVICE_ADDR
+          value: "shippingservice:50051"
+        - name: CHECKOUT_SERVICE_ADDR
+          value: "checkoutservice:5050"
+        - name: AD_SERVICE_ADDR
+          value: "adservice:9555"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: xxx
+  name: frontend
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
-    app: xxx
+    app: frontend
   ports:
   - protocol: TCP
-    port: xxx
-    targetPort: xxx
+    port: 8080
+    targetPort: 8080
+    nodePort: 30007
