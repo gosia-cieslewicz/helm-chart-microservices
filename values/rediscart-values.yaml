@@ -1,0 +1,3 @@
+app:
+  name: redis-cart
+  replicaCount: 2
