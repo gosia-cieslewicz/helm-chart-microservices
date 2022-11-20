@@ -464,20 +464,14 @@ spec:
         image: redis:alpine
         ports:
         - containerPort: 6379
-        volumeMount:
-        - name: redis-data
-          mountPath: /data
-      volumes:
-      - name: redis-data
-        emptyDir: {}
-      livenessProbe:
-        initialDelaySeconds: 5
-        tcpSocket:
-          port: 6379
-      livenessProbe:
-        periodSeconds: 5
-        tcpSocket:
-          port: 6379
+        readinessProbe:
+          initialDelaySeconds: 5
+          tcpSocket:
+            port: 6379
+        livenessProbe:
+          periodSeconds: 5
+          tcpSocket:
+            port: 6379
         resources:
           requests:
             cpu: 70m
@@ -485,6 +479,12 @@ spec:
           limits:
             cpu: 125m
             memory: 256Mi
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -532,7 +532,7 @@ spec:
         - name: CURRENCY_SERVICE_ADDR
           value: "currencyservice:7000"
         - name: CART_SERVICE_ADDR
-          value]: "cartservice:7070"
+          value: "cartservice:7070"
         - name: DISABLE_STATS
           value: "1"
         - name: DISABLE_TRACING
