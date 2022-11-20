@@ -1,6 +1,6 @@
 app:
   name: recommendationservice
-  version: v0.2.3
+  version: v0.4.1
   replicaCount: 2
 
 image:
