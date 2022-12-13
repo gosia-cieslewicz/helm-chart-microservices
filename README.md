@@ -22,3 +22,53 @@ https://github.com/GoogleCloudPlatform/microservices-demo
 # Connection Graph
 
 ![connection graph](connection-graph.png?raw=true "Connection Graph")
+
+# Local setup for testing locally with Minikube
+
+1. Install minikube (will also install kubectl):
+
+`brew install minikube`
+
+2. Start minikube cluster with docker driver
+
+`minikube start --driver docker`
+
+## Start app using Kubernetes Manifest file
+
+3. Create microservices namespace:
+
+`kubectl create ns microservices`
+
+4. Apply config file:
+
+`kubectl apply -f config.yaml -n microservices`
+
+5. Forward port to access browser at: http://localhost:8080/
+
+`kubectl port-forward deployment/frontend 8080`
+
+6. Stop all components:
+
+`kubectl delete -f config.yaml -n microservices`
+
+## Or start app using Helm Chart
+
+3. Install helm:
+
+`brew install helm`
+
+4. Install helmfile:
+
+`brew install helmfile`
+
+5. Sync the cluster with desired state of the app declared in helmfile:
+
+`helmfile sync`
+
+6. Forward port to access browser at: http://localhost:8080/
+
+`kubectl port-forward deployment/frontend 8080`
+
+7. Stop all helm releases:
+
+`helmfile destroy`
